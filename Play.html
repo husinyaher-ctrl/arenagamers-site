@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Game - ArenaGamers</title>
+    <link rel="icon" type="image/png" href="icon-192.png">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #0d0d13; color: white; margin: 0; padding: 0; text-align: center; overflow: hidden; }
+        .nav-bar { background-color: #161622; padding: 12px 15px; text-align: left; box-shadow: 0 4px 6px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 12px; }
+        .btn-kembali { color: white; text-decoration: none; font-weight: bold; background: #ff0080; padding: 8px 16px; border-radius: 6px; font-size: 14px; flex-shrink: 0; }
+        .judul-game { font-size: 14px; color: #a1a1aa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        #game-container { width: 100%; height: calc(100vh - 120px); background: #000; display: flex; align-items: center; justify-content: center; color: #71717a; font-size: 13px; flex-direction: column; }
+        iframe { width: 100%; height: 100%; border: none; }
+        .slot-iklan-bawah { width: 100%; height: 55px; background: #161622; line-height: 55px; font-size: 11px; color: #71717a; position: absolute; bottom: 0; left: 0; }
+    </style>
+</head>
+<body>
+
+    <div class="nav-bar">
+        <a href="index.html" class="btn-kembali">◀ Menu</a>
+        <span class="judul-game" id="judul-game">Memuat...</span>
+    </div>
+
+    <div id="game-container">Memuat game...</div>
+
+    <div class="slot-iklan-bawah">Area Iklan Bawah (Monetag / AdSense)</div>
+
+    <script src="assets/js/games-feed.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        // Support ?game= , ?id= , ?slug=
+        const gameId = urlParams.get('game') || urlParams.get('id') || urlParams.get('slug');
+        const container = document.getElementById('game-container');
+        const judulEl = document.getElementById('judul-game');
+
+        function slugify(t){
+            return (t||'').toString().toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+        }
+
+        getGamesCatalog().then(function (games) {
+            if(!games || !games.length){
+                judulEl.textContent = 'Katalog kosong';
+                container.innerHTML = '<p style="padding:20px;">data-game.json kosong atau gagal load.</p>';
+                return;
+            }
+
+            const cari = (gameId||'').toLowerCase().trim();
+            const cariSlug = slugify(cari);
+
+            // Cari paling toleran: id, slug, title
+            const game = games.find(function (g) { 
+                const gid = (g.id||'').toLowerCase();
+                const gslug = (g.slug|| slugify(g.title)||'').toLowerCase();
+                const gtitle = (g.title||'').toLowerCase();
+                return gid === cari || gslug === cari || gtitle === cari || gslug === cariSlug;
+            });
+
+            if (!game) {
+                judulEl.textContent = 'Game tidak ditemukan: ' + gameId;
+                container.innerHTML = '<div style="padding:30px;"><h2 style="color:white;">Game not found!</h2><p style="color:#a1a1aa;">ID yang dicari: <b>'+ (gameId||'-') +'</b><br><br>Balik ke Menu, klik lagi gamenya.<br><br><small>Debug: '+ games.length +' game terload dari JSON</small></p></div>';
+                return;
+            }
+
+            judulEl.textContent = game.title;
+            const gameUrl = game.url || game.game_url || game.link || game.embed;
+
+            if (!gameUrl) {
+                container.innerHTML = '<p style="padding:20px; color:#a1a1aa;">Link game <b>'+ game.title +'</b> belum ada URL embed.<br>Isi field "url" di data-game.json</p>';
+                return;
+            }
+
+            container.innerHTML = '<iframe src="' + gameUrl + '" allowfullscreen scrolling="no"></iframe>';
+        }).catch(function (err) {
+            console.error(err);
+            container.innerHTML = '<p style="padding:20px; color:#a1a1aa;">Gagal memuat data game: ' + err.message + '</p>';
+        });
+    </script>
+</body>
+</html>
