@@ -1,0 +1,10 @@
+# PENTING: file ini masih PLACEHOLDER.
+# Setiap platform iklan (Google AdSense, Monetag, GameMonetize, dll) akan
+# memberikan baris ads.txt resmi masing-masing di dashboard mereka setelah
+# akun Anda disetujui. Salin baris tersebut ke file ini, contoh formatnya:
+#
+# google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
+# gamemonetize.com, XXXXXXXX, DIRECT
+#
+# Tanpa baris yang benar, sebagian platform iklan tidak akan menayangkan
+# iklan di domain ini walau situsnya sudah live.

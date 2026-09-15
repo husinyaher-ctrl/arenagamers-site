@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArenaGamers - Portal Game Seru Gratis</title>
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff0080">
+    <link rel="icon" type="image/png" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0d0d13;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background-color: #161622;
+            padding: 14px 16px;
+            border-bottom: 3px solid #ff0080;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        header img.logo {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+        header h1 {
+            margin: 0;
+            color: #ff0080;
+            font-size: 22px;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 10px rgba(255, 0, 128, 0.5);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        main { padding: 15px; flex: 1; }
+        .slot-iklan-atas {
+            width: 100%;
+            height: 65px;
+            background: #161622;
+            margin: 10px 0 20px 0;
+            text-align: center;
+            line-height: 65px;
+            font-size: 11px;
+            color: #71717a;
+            border: 1px dashed #3f3f46;
+            border-radius: 6px;
+        }
+        h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ff0080;
+            padding-left: 10px;
+        }
+        .grid-game {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .kartu-game {
+            background-color: #161622;
+            border-radius: 12px;
+            overflow: hidden;
+            text-decoration: none;
+            color: white;
+            text-align: center;
+            border: 1px solid #27272a;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        .kartu-game:active { transform: scale(0.95); }
+        .kartu-game img {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+            border-bottom: 2px solid #27272a;
+            background: #0d0d13;
+        }
+        .kartu-game p {
+            margin: 10px 5px;
+            font-weight: 600;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .status-muat {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: #71717a;
+            font-size: 13px;
+            padding: 20px 0;
+        }
+        footer {
+            text-align: center;
+            padding: 16px;
+            font-size: 12px;
+            color: #71717a;
+            border-top: 1px solid #27272a;
+        }
+        footer a { color: #ff0080; text-decoration: none; margin: 0 6px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="icon-192.png" alt="Logo ArenaGamers" class="logo">
+        <h1>ArenaGamers</h1>
+    </header>
+
+    <main>
+        <div class="slot-iklan-atas">Area Iklan Banner (Monetag / AdSense)</div>
+
+        <h2>🔥 Game Populer Gratis</h2>
+        <div class="grid-game" id="grid-game">
+            <div class="status-muat">Memuat katalog game...</div>
+        </div>
+    </main>
+
+    <footer>
+        &copy; <span id="tahun"></span> ArenaGamers &middot;
+        <a href="privacy.html">Privasi</a> &middot;
+        <a href="terms.html">Ketentuan</a>
+    </footer>
+
+    <script src="assets/js/games-feed.js"></script>
+    <script>
+        document.getElementById('tahun').textContent = new Date().getFullYear();
+
+        function renderGames(games) {
+            const grid = document.getElementById('grid-game');
+            if (!games || games.length === 0) {
+                grid.innerHTML = '<div class="status-muat">Belum ada game tersedia.</div>';
+                return;
+            }
+            grid.innerHTML = games.map(function (g) {
+                return (
+                    '<a href="play.html?game=' + encodeURIComponent(g.id) + '" class="kartu-game">' +
+                        '<img src="' + g.thumb + '" alt="' + g.title + '" loading="lazy">' +
+                        '<p>' + g.title + '</p>' +
+                    '</a>'
+                );
+            }).join('');
+        }
+
+        getGamesCatalog().then(renderGames).catch(function () {
+            document.getElementById('grid-game').innerHTML =
+                '<div class="status-muat">Gagal memuat katalog. Coba refresh halaman.</div>';
+        });
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(() => console.log('PWA Berhasil!'))
+                    .catch(err => console.log('PWA Gagal:', err));
+            });
+        }
+    </script>
+</body>
+</html>
