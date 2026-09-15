@@ -12,107 +12,40 @@
 
     <style>
         * { box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0d0d13;
-            color: #ffffff;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        header {
-            background-color: #161622;
-            padding: 14px 16px;
-            border-bottom: 3px solid #ff0080;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        header img.logo {
-            width: 34px;
-            height: 34px;
-            border-radius: 8px;
-            flex-shrink: 0;
-        }
-        header h1 {
-            margin: 0;
-            color: #ff0080;
-            font-size: 22px;
-            letter-spacing: 0.5px;
-            text-shadow: 0 0 10px rgba(255, 0, 128, 0.5);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        main { padding: 15px; flex: 1; }
-        .slot-iklan-atas {
-            width: 100%;
-            height: 65px;
-            background: #161622;
-            margin: 10px 0 20px 0;
-            text-align: center;
-            line-height: 65px;
-            font-size: 11px;
-            color: #71717a;
-            border: 1px dashed #3f3f46;
-            border-radius: 6px;
-        }
-        h2 {
-            font-size: 18px;
-            margin-bottom: 15px;
-            border-left: 4px solid #ff0080;
-            padding-left: 10px;
-        }
-        .grid-game {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-        .kartu-game {
-            background-color: #161622;
-            border-radius: 12px;
-            overflow: hidden;
-            text-decoration: none;
-            color: white;
-            text-align: center;
-            border: 1px solid #27272a;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            transition: transform 0.2s;
-        }
-        .kartu-game:active { transform: scale(0.95); }
-        .kartu-game img {
-            width: 100%;
-            height: 110px;
-            object-fit: cover;
-            border-bottom: 2px solid #27272a;
-            background: #0d0d13;
-        }
-        .kartu-game p {
-            margin: 10px 5px;
-            font-weight: 600;
-            font-size: 14px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .status-muat {
-            grid-column: 1 / -1;
-            text-align: center;
-            color: #71717a;
-            font-size: 13px;
-            padding: 20px 0;
-        }
-        footer {
-            text-align: center;
-            padding: 16px;
-            font-size: 12px;
-            color: #71717a;
-            border-top: 1px solid #27272a;
-        }
-        footer a { color: #ff0080; text-decoration: none; margin: 0 6px; }
+        body { font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; background:#0d0d13; color:#fff; margin:0; min-height:100vh; display:flex; flex-direction:column; }
+        header { background:#161622; padding:14px 16px; border-bottom:3px solid #ff0080; box-shadow:0 4px 10px rgba(0,0,0,.3); display:flex; align-items:center; gap:10px; }
+        header img.logo { width:34px; height:34px; border-radius:8px; flex-shrink:0; }
+        header h1 { margin:0; color:#ff0080; font-size:22px; letter-spacing:.5px; text-shadow:0 0 10px rgba(255,0,128,.5); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        main { padding:15px; flex:1; width:100%; max-width:1200px; margin:0 auto; }
+        .slot-iklan-atas { width:100%; min-height:65px; background:#161622; margin:10px 0 20px; display:flex; align-items:center; justify-content:center; text-align:center; font-size:11px; color:#71717a; border:1px dashed #3f3f46; border-radius:6px; }
+        .intro { margin:0 0 18px; }
+        .intro h2 { font-size:22px; margin:0 0 6px; border-left:4px solid #ff0080; padding-left:10px; }
+        .intro p { color:#a1a1aa; font-size:13px; margin:0; }
+        .search-box { position:relative; margin:0 0 15px; }
+        .search-box input { width:100%; height:48px; border:1px solid #3f3f46; border-radius:10px; background:#161622; color:#fff; padding:0 46px 0 16px; font-size:14px; outline:none; }
+        .search-box input::placeholder { color:#71717a; }
+        .search-box input:focus { border-color:#ff0080; box-shadow:0 0 0 2px rgba(255,0,128,.12); }
+        .search-icon { position:absolute; right:15px; top:50%; transform:translateY(-50%); color:#a1a1aa; pointer-events:none; font-size:18px; }
+        .kategori-wrapper { overflow-x:auto; padding-bottom:5px; margin-bottom:22px; scrollbar-width:thin; }
+        .kategori { display:flex; gap:8px; min-width:max-content; }
+        .kategori-btn { border:1px solid #3f3f46; background:#161622; color:#d4d4d8; padding:9px 14px; border-radius:999px; font-size:12px; cursor:pointer; white-space:nowrap; transition:.2s ease; }
+        .kategori-btn:hover, .kategori-btn.active { background:#ff0080; border-color:#ff0080; color:#fff; }
+        .section-heading { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:15px; }
+        .section-heading h2 { font-size:18px; margin:0; border-left:4px solid #ff0080; padding-left:10px; }
+        .jumlah-game { color:#71717a; font-size:12px; }
+        .grid-game { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:15px; }
+        .kartu-game { background:#161622; border-radius:12px; overflow:hidden; text-decoration:none; color:#fff; text-align:left; border:1px solid #27272a; box-shadow:0 4px 6px rgba(0,0,0,.2); transition:transform .2s,border-color .2s,box-shadow .2s; min-width:0; }
+        .kartu-game:hover { transform:translateY(-3px); border-color:#ff0080; box-shadow:0 8px 18px rgba(0,0,0,.28); }
+        .kartu-game:active { transform:scale(.97); }
+        .kartu-game img { display:block; width:100%; aspect-ratio:16/10; object-fit:cover; border-bottom:2px solid #27272a; background:#0d0d13; }
+        .game-info { padding:10px; }
+        .kartu-game p { margin:0; font-weight:600; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .game-category { display:inline-block; margin-top:7px; color:#a1a1aa; font-size:11px; }
+        .status-muat { grid-column:1/-1; text-align:center; color:#71717a; font-size:13px; padding:30px 10px; }
+        footer { text-align:center; padding:16px; font-size:12px; color:#71717a; border-top:1px solid #27272a; }
+        footer a { color:#ff0080; text-decoration:none; margin:0 6px; }
+        @media (min-width:600px) { .grid-game { grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; } }
+        @media (min-width:900px) { main { padding:20px; } .grid-game { grid-template-columns:repeat(4,minmax(0,1fr)); } }
     </style>
 </head>
 <body>
@@ -125,7 +58,27 @@
     <main>
         <div class="slot-iklan-atas">Area Iklan Banner (Monetag / AdSense)</div>
 
-        <h2>🔥 Game Populer Gratis</h2>
+        <section class="intro">
+            <h2>🎮 Main Game Gratis</h2>
+            <p>Temukan game favoritmu dan langsung mainkan di browser.</p>
+        </section>
+
+        <div class="search-box">
+            <input type="search" id="search-game" placeholder="Cari game..." autocomplete="off" aria-label="Cari game">
+            <span class="search-icon">⌕</span>
+        </div>
+
+        <div class="kategori-wrapper">
+            <div class="kategori" id="kategori-game">
+                <button class="kategori-btn active" data-category="Semua">Semua</button>
+            </div>
+        </div>
+
+        <div class="section-heading">
+            <h2>🔥 Game Populer Gratis</h2>
+            <span class="jumlah-game" id="jumlah-game"></span>
+        </div>
+
         <div class="grid-game" id="grid-game">
             <div class="status-muat">Memuat katalog game...</div>
         </div>
@@ -141,32 +94,98 @@
     <script>
         document.getElementById('tahun').textContent = new Date().getFullYear();
 
+        let semuaGames = [];
+        let kategoriAktif = 'Semua';
+
+        const grid = document.getElementById('grid-game');
+        const searchInput = document.getElementById('search-game');
+        const kategoriEl = document.getElementById('kategori-game');
+        const jumlahEl = document.getElementById('jumlah-game');
+
+        function escapeHtml(value) {
+            return String(value ?? '').replace(/[&<>"']/g, function(char) {
+                return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char];
+            });
+        }
+
+        function getCategory(game) {
+            return String(game.category || game.categories || game.genre || game.type || 'Lainnya').trim() || 'Lainnya';
+        }
+
+        function renderCategories(games) {
+            const categories = [...new Set(games.map(getCategory))].sort(function(a,b) {
+                return a.localeCompare(b, 'id');
+            });
+
+            kategoriEl.innerHTML =
+                '<button class="kategori-btn active" data-category="Semua">Semua</button>' +
+                categories.map(function(category) {
+                    return '<button class="kategori-btn" data-category="' + escapeHtml(category) + '">' +
+                        escapeHtml(category) + '</button>';
+                }).join('');
+
+            kategoriEl.querySelectorAll('.kategori-btn').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    kategoriAktif = this.dataset.category;
+                    kategoriEl.querySelectorAll('.kategori-btn').forEach(function(btn) {
+                        btn.classList.toggle('active', btn === button);
+                    });
+                    filterAndRender();
+                });
+            });
+        }
+
         function renderGames(games) {
-            const grid = document.getElementById('grid-game');
             if (!games || games.length === 0) {
-                grid.innerHTML = '<div class="status-muat">Belum ada game tersedia.</div>';
+                grid.innerHTML = '<div class="status-muat">Game tidak ditemukan.</div>';
+                jumlahEl.textContent = '0 game';
                 return;
             }
-            grid.innerHTML = games.map(function (g) {
-                return (
-                    '<a href="play.html?game=' + encodeURIComponent(g.id) + '" class="kartu-game">' +
-                        '<img src="' + g.thumb + '" alt="' + g.title + '" loading="lazy">' +
-                        '<p>' + g.title + '</p>' +
-                    '</a>'
-                );
+
+            jumlahEl.textContent = games.length + ' game';
+
+            grid.innerHTML = games.map(function(g) {
+                const title = escapeHtml(g.title || 'Game');
+                const thumb = escapeHtml(g.thumb || '');
+                const category = escapeHtml(getCategory(g));
+
+                return '<a href="play.html?game=' + encodeURIComponent(g.id) + '" class="kartu-game">' +
+                    '<img src="' + thumb + '" alt="' + title + '" loading="lazy">' +
+                    '<div class="game-info"><p>' + title + '</p><span class="game-category">' + category + '</span></div>' +
+                    '</a>';
             }).join('');
         }
 
-        getGamesCatalog().then(renderGames).catch(function () {
-            document.getElementById('grid-game').innerHTML =
-                '<div class="status-muat">Gagal memuat katalog. Coba refresh halaman.</div>';
+        function filterAndRender() {
+            const keyword = searchInput.value.trim().toLowerCase();
+
+            const filtered = semuaGames.filter(function(game) {
+                const title = String(game.title || '').toLowerCase();
+                const category = getCategory(game).toLowerCase();
+
+                return (!keyword || title.includes(keyword) || category.includes(keyword)) &&
+                    (kategoriAktif === 'Semua' || getCategory(game) === kategoriAktif);
+            });
+
+            renderGames(filtered);
+        }
+
+        searchInput.addEventListener('input', filterAndRender);
+
+        getGamesCatalog().then(function(games) {
+            semuaGames = Array.isArray(games) ? games : [];
+            renderCategories(semuaGames);
+            filterAndRender();
+        }).catch(function() {
+            grid.innerHTML = '<div class="status-muat">Gagal memuat katalog. Coba refresh halaman.</div>';
+            jumlahEl.textContent = '';
         });
 
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
+            window.addEventListener('load', function() {
                 navigator.serviceWorker.register('sw.js')
-                    .then(() => console.log('PWA Berhasil!'))
-                    .catch(err => console.log('PWA Gagal:', err));
+                    .then(function() { console.log('PWA Berhasil!'); })
+                    .catch(function(err) { console.log('PWA Gagal:', err); });
             });
         }
     </script>
