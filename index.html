@@ -1,193 +1,71 @@
 <!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ArenaGamers - Portal Game Seru Gratis</title>
-
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#ff0080">
-    <link rel="icon" type="image/png" href="icon-192.png">
-    <link rel="apple-touch-icon" href="icon-192.png">
-
-    <style>
-        * { box-sizing: border-box; }
-        body { font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; background:#0d0d13; color:#fff; margin:0; min-height:100vh; display:flex; flex-direction:column; }
-        header { background:#161622; padding:14px 16px; border-bottom:3px solid #ff0080; box-shadow:0 4px 10px rgba(0,0,0,.3); display:flex; align-items:center; gap:10px; }
-        header img.logo { width:34px; height:34px; border-radius:8px; flex-shrink:0; }
-        header h1 { margin:0; color:#ff0080; font-size:22px; letter-spacing:.5px; text-shadow:0 0 10px rgba(255,0,128,.5); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-        main { padding:15px; flex:1; width:100%; max-width:1200px; margin:0 auto; }
-        .slot-iklan-atas { width:100%; min-height:65px; background:#161622; margin:10px 0 20px; display:flex; align-items:center; justify-content:center; text-align:center; font-size:11px; color:#71717a; border:1px dashed #3f3f46; border-radius:6px; }
-        .intro { margin:0 0 18px; }
-        .intro h2 { font-size:22px; margin:0 0 6px; border-left:4px solid #ff0080; padding-left:10px; }
-        .intro p { color:#a1a1aa; font-size:13px; margin:0; }
-        .search-box { position:relative; margin:0 0 15px; }
-        .search-box input { width:100%; height:48px; border:1px solid #3f3f46; border-radius:10px; background:#161622; color:#fff; padding:0 46px 0 16px; font-size:14px; outline:none; }
-        .search-box input::placeholder { color:#71717a; }
-        .search-box input:focus { border-color:#ff0080; box-shadow:0 0 0 2px rgba(255,0,128,.12); }
-        .search-icon { position:absolute; right:15px; top:50%; transform:translateY(-50%); color:#a1a1aa; pointer-events:none; font-size:18px; }
-        .kategori-wrapper { overflow-x:auto; padding-bottom:5px; margin-bottom:22px; scrollbar-width:thin; }
-        .kategori { display:flex; gap:8px; min-width:max-content; }
-        .kategori-btn { border:1px solid #3f3f46; background:#161622; color:#d4d4d8; padding:9px 14px; border-radius:999px; font-size:12px; cursor:pointer; white-space:nowrap; transition:.2s ease; }
-        .kategori-btn:hover, .kategori-btn.active { background:#ff0080; border-color:#ff0080; color:#fff; }
-        .section-heading { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:15px; }
-        .section-heading h2 { font-size:18px; margin:0; border-left:4px solid #ff0080; padding-left:10px; }
-        .jumlah-game { color:#71717a; font-size:12px; }
-        .grid-game { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:15px; }
-        .kartu-game { background:#161622; border-radius:12px; overflow:hidden; text-decoration:none; color:#fff; text-align:left; border:1px solid #27272a; box-shadow:0 4px 6px rgba(0,0,0,.2); transition:transform .2s,border-color .2s,box-shadow .2s; min-width:0; }
-        .kartu-game:hover { transform:translateY(-3px); border-color:#ff0080; box-shadow:0 8px 18px rgba(0,0,0,.28); }
-        .kartu-game:active { transform:scale(.97); }
-        .kartu-game img { display:block; width:100%; aspect-ratio:16/10; object-fit:cover; border-bottom:2px solid #27272a; background:#0d0d13; }
-        .game-info { padding:10px; }
-        .kartu-game p { margin:0; font-weight:600; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-        .game-category { display:inline-block; margin-top:7px; color:#a1a1aa; font-size:11px; }
-        .status-muat { grid-column:1/-1; text-align:center; color:#71717a; font-size:13px; padding:30px 10px; }
-        footer { text-align:center; padding:16px; font-size:12px; color:#71717a; border-top:1px solid #27272a; }
-        footer a { color:#ff0080; text-decoration:none; margin:0 6px; }
-        @media (min-width:600px) { .grid-game { grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; } }
-        @media (min-width:900px) { main { padding:20px; } .grid-game { grid-template-columns:repeat(4,minmax(0,1fr)); } }
-    </style>
-</head>
-<body>
-
-    <header>
-        <img src="icon-192.png" alt="Logo ArenaGamers" class="logo">
-        <h1>ArenaGamers</h1>
-    </header>
-
-    <main>
-        <div class="slot-iklan-atas">Area Iklan Banner (Monetag / AdSense)</div>
-
-        <section class="intro">
-            <h2>🎮 Main Game Gratis</h2>
-            <p>Temukan game favoritmu dan langsung mainkan di browser.</p>
-        </section>
-
-        <div class="search-box">
-            <input type="search" id="search-game" placeholder="Cari game..." autocomplete="off" aria-label="Cari game">
-            <span class="search-icon">⌕</span>
-        </div>
-
-        <div class="kategori-wrapper">
-            <div class="kategori" id="kategori-game">
-                <button class="kategori-btn active" data-category="Semua">Semua</button>
-            </div>
-        </div>
-
-        <div class="section-heading">
-            <h2>🔥 Game Populer Gratis</h2>
-            <span class="jumlah-game" id="jumlah-game"></span>
-        </div>
-
-        <div class="grid-game" id="grid-game">
-            <div class="status-muat">Memuat katalog game...</div>
-        </div>
-    </main>
-
-    <footer>
-        &copy; <span id="tahun"></span> ArenaGamers &middot;
-        <a href="privacy.html">Privasi</a> &middot;
-        <a href="terms.html">Ketentuan</a>
-    </footer>
-
-    <script src="assets/js/games-feed.js"></script>
-    <script>
-        document.getElementById('tahun').textContent = new Date().getFullYear();
-
-        let semuaGames = [];
-        let kategoriAktif = 'Semua';
-
-        const grid = document.getElementById('grid-game');
-        const searchInput = document.getElementById('search-game');
-        const kategoriEl = document.getElementById('kategori-game');
-        const jumlahEl = document.getElementById('jumlah-game');
-
-        function escapeHtml(value) {
-            return String(value ?? '').replace(/[&<>"']/g, function(char) {
-                return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char];
-            });
-        }
-
-        function getCategory(game) {
-            return String(game.category || game.categories || game.genre || game.type || 'Lainnya').trim() || 'Lainnya';
-        }
-
-        function renderCategories(games) {
-            const categories = [...new Set(games.map(getCategory))].sort(function(a,b) {
-                return a.localeCompare(b, 'id');
-            });
-
-            kategoriEl.innerHTML =
-                '<button class="kategori-btn active" data-category="Semua">Semua</button>' +
-                categories.map(function(category) {
-                    return '<button class="kategori-btn" data-category="' + escapeHtml(category) + '">' +
-                        escapeHtml(category) + '</button>';
-                }).join('');
-
-            kategoriEl.querySelectorAll('.kategori-btn').forEach(function(button) {
-                button.addEventListener('click', function() {
-                    kategoriAktif = this.dataset.category;
-                    kategoriEl.querySelectorAll('.kategori-btn').forEach(function(btn) {
-                        btn.classList.toggle('active', btn === button);
-                    });
-                    filterAndRender();
-                });
-            });
-        }
-
-        function renderGames(games) {
-            if (!games || games.length === 0) {
-                grid.innerHTML = '<div class="status-muat">Game tidak ditemukan.</div>';
-                jumlahEl.textContent = '0 game';
-                return;
-            }
-
-            jumlahEl.textContent = games.length + ' game';
-
-            grid.innerHTML = games.map(function(g) {
-                const title = escapeHtml(g.title || 'Game');
-                const thumb = escapeHtml(g.thumb || '');
-                const category = escapeHtml(getCategory(g));
-
-                return '<a href="play.html?game=' + encodeURIComponent(g.id) + '" class="kartu-game">' +
-                    '<img src="' + thumb + '" alt="' + title + '" loading="lazy">' +
-                    '<div class="game-info"><p>' + title + '</p><span class="game-category">' + category + '</span></div>' +
-                    '</a>';
-            }).join('');
-        }
-
-        function filterAndRender() {
-            const keyword = searchInput.value.trim().toLowerCase();
-
-            const filtered = semuaGames.filter(function(game) {
-                const title = String(game.title || '').toLowerCase();
-                const category = getCategory(game).toLowerCase();
-
-                return (!keyword || title.includes(keyword) || category.includes(keyword)) &&
-                    (kategoriAktif === 'Semua' || getCategory(game) === kategoriAktif);
-            });
-
-            renderGames(filtered);
-        }
-
-        searchInput.addEventListener('input', filterAndRender);
-
-        getGamesCatalog().then(function(games) {
-            semuaGames = Array.isArray(games) ? games : [];
-            renderCategories(semuaGames);
-            filterAndRender();
-        }).catch(function() {
-            grid.innerHTML = '<div class="status-muat">Gagal memuat katalog. Coba refresh halaman.</div>';
-            jumlahEl.textContent = '';
-        });
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('sw.js')
-                    .then(function() { console.log('PWA Berhasil!'); })
-                    .catch(function(err) { console.log('PWA Gagal:', err); });
-            });
-        }
-    </script>
-</body>
-</html>
+<html lang="id"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ArenaGamers - Main Game Gratis</title>
+<link rel="manifest" href="manifest.json"><link rel="icon" href="icon-192.png">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0d0d13;color:#fff;font-family:Segoe UI,sans-serif}
+.header{padding:14px 16px;background:#161622;border-bottom:2px solid #ff0080;display:flex;justify-content:space-between;align-items:center}
+.logo{color:#ff2e9d;font-weight:900;font-size:22px;letter-spacing:1px}
+.banner{margin:12px;border:1px dashed #333;padding:20px;text-align:center;color:#666;border-radius:12px;background:#161622;font-size:12px}
+.search{margin:12px;padding:14px;border-radius:12px;background:#161622;width:calc(100% - 24px);border:1px solid #2a2a3a;color:#fff;outline:none}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}
+@media(min-width:700px){.grid{grid-template-columns:1fr 1fr 1fr 1fr}}
+.card{background:#161622;border-radius:14px;overflow:hidden;text-decoration:none;color:#fff;display:block;border:1px solid #222;transition:.2s}
+.card:hover{transform:translateY(-2px);border-color:#ff0080}
+.card img{width:100%;height:150px;object-fit:cover;background:#222;display:block}
+.card .t{padding:10px 10px 2px;font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .c{padding:0 10px 10px;font-size:11px;color:#a1a1aa}
+.cat{display:flex;gap:8px;padding:0 12px;overflow:auto}
+.cat button{white-space:nowrap;padding:8px 14px;border-radius:20px;border:1px solid #333;background:#161622;color:#a1a1aa;cursor:pointer}
+.cat button.active{background:#ff0080;color:#fff;border-color:#ff0080}
+</style>
+</head><body>
+<div class="header"><div class="logo">ArenaGamers</div><div style="font-size:11px;color:#666">20 game</div></div>
+<div class="banner">Area Iklan Banner (Monetag / AdSense) - ads.txt sudah valid</div>
+<div class="cat" id="cats"></div>
+<input id="q" class="search" placeholder="Cari game... misal Bus, Racing...">
+<div id="count" style="padding:0 16px;color:#a1a1aa;font-size:12px"></div>
+<div id="list" class="grid">Memuat 20 game...</div>
+<script src="assets/js/games-feed.js"></script>
+<script>
+const listEl=document.getElementById('list');
+const countEl=document.getElementById('count');
+const qEl=document.getElementById('q');
+const catsEl=document.getElementById('cats');
+let ALL=[];
+const categories=['Semua','Arcade','Action','Puzzle','Racing','Shooting','Sports','Clicker','Adventure','Girls'];
+catsEl.innerHTML=categories.map((c,i)=>`<button class="${i==0?'active':''}" data-cat="${c}">${c}</button>`).join('');
+function render(arr){
+  countEl.textContent=arr.length+' game ditemukan';
+  listEl.innerHTML=arr.map(g=>{
+    const id=getGameId(g);
+    return `<a class="card" href="play.html?id=${encodeURIComponent(id)}">
+      <img src="${getThumb(g)}" loading="lazy" onerror="this.src='https://via.placeholder.com/512x384/161622/ff0080?text='+encodeURIComponent(getGameTitle(g))">
+      <div class="t">${getGameTitle(g)}</div>
+      <div class="c">${g.category||'Game'}</div>
+    </a>`;
+  }).join('') || '<p style="grid-column:1/-1;text-align:center;color:#a1a1aa">Game tidak ditemukan</p>';
+}
+function filter(){
+  const k=qEl.value.toLowerCase();
+  const activeCat=document.querySelector('.cat button.active').dataset.cat;
+  let f=ALL;
+  if(activeCat!=='Semua') f=f.filter(g=>(g.category||'').toLowerCase()===activeCat.toLowerCase());
+  if(k) f=f.filter(g=> (g.title||'').toLowerCase().includes(k) );
+  render(f);
+}
+getGamesCatalog().then(games=>{
+  ALL=games;
+  render(ALL);
+  qEl.addEventListener('input',filter);
+  catsEl.addEventListener('click',e=>{
+    if(e.target.tagName==='BUTTON'){
+      document.querySelectorAll('.cat button').forEach(b=>b.classList.remove('active'));
+      e.target.classList.add('active');
+      filter();
+    }
+  });
+});
+</script>
+</body></html>
