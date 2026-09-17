@@ -1,71 +1,108 @@
 <!DOCTYPE html>
-<html lang="id"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ArenaGamers - Main Game Gratis</title>
-<link rel="manifest" href="manifest.json"><link rel="icon" href="icon-192.png">
-<style>
-*{box-sizing:border-box}body{margin:0;background:#0d0d13;color:#fff;font-family:Segoe UI,sans-serif}
-.header{padding:14px 16px;background:#161622;border-bottom:2px solid #ff0080;display:flex;justify-content:space-between;align-items:center}
-.logo{color:#ff2e9d;font-weight:900;font-size:22px;letter-spacing:1px}
-.banner{margin:12px;border:1px dashed #333;padding:20px;text-align:center;color:#666;border-radius:12px;background:#161622;font-size:12px}
-.search{margin:12px;padding:14px;border-radius:12px;background:#161622;width:calc(100% - 24px);border:1px solid #2a2a3a;color:#fff;outline:none}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}
-@media(min-width:700px){.grid{grid-template-columns:1fr 1fr 1fr 1fr}}
-.card{background:#161622;border-radius:14px;overflow:hidden;text-decoration:none;color:#fff;display:block;border:1px solid #222;transition:.2s}
-.card:hover{transform:translateY(-2px);border-color:#ff0080}
-.card img{width:100%;height:150px;object-fit:cover;background:#222;display:block}
-.card .t{padding:10px 10px 2px;font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card .c{padding:0 10px 10px;font-size:11px;color:#a1a1aa}
-.cat{display:flex;gap:8px;padding:0 12px;overflow:auto}
-.cat button{white-space:nowrap;padding:8px 14px;border-radius:20px;border:1px solid #333;background:#161622;color:#a1a1aa;cursor:pointer}
-.cat button.active{background:#ff0080;color:#fff;border-color:#ff0080}
-</style>
-</head><body>
-<div class="header"><div class="logo">ArenaGamers</div><div style="font-size:11px;color:#666">20 game</div></div>
-<div class="banner">Area Iklan Banner (Monetag / AdSense) - ads.txt sudah valid</div>
-<div class="cat" id="cats"></div>
-<input id="q" class="search" placeholder="Cari game... misal Bus, Racing...">
-<div id="count" style="padding:0 16px;color:#a1a1aa;font-size:12px"></div>
-<div id="list" class="grid">Memuat 20 game...</div>
-<script src="assets/js/games-feed.js"></script>
-<script>
-const listEl=document.getElementById('list');
-const countEl=document.getElementById('count');
-const qEl=document.getElementById('q');
-const catsEl=document.getElementById('cats');
-let ALL=[];
-const categories=['Semua','Arcade','Action','Puzzle','Racing','Shooting','Sports','Clicker','Adventure','Girls'];
-catsEl.innerHTML=categories.map((c,i)=>`<button class="${i==0?'active':''}" data-cat="${c}">${c}</button>`).join('');
-function render(arr){
-  countEl.textContent=arr.length+' game ditemukan';
-  listEl.innerHTML=arr.map(g=>{
-    const id=getGameId(g);
-    return `<a class="card" href="play.html?id=${encodeURIComponent(id)}">
-      <img src="${getThumb(g)}" loading="lazy" onerror="this.src='https://via.placeholder.com/512x384/161622/ff0080?text='+encodeURIComponent(getGameTitle(g))">
-      <div class="t">${getGameTitle(g)}</div>
-      <div class="c">${g.category||'Game'}</div>
-    </a>`;
-  }).join('') || '<p style="grid-column:1/-1;text-align:center;color:#a1a1aa">Game tidak ditemukan</p>';
-}
-function filter(){
-  const k=qEl.value.toLowerCase();
-  const activeCat=document.querySelector('.cat button.active').dataset.cat;
-  let f=ALL;
-  if(activeCat!=='Semua') f=f.filter(g=>(g.category||'').toLowerCase()===activeCat.toLowerCase());
-  if(k) f=f.filter(g=> (g.title||'').toLowerCase().includes(k) );
-  render(f);
-}
-getGamesCatalog().then(games=>{
-  ALL=games;
-  render(ALL);
-  qEl.addEventListener('input',filter);
-  catsEl.addEventListener('click',e=>{
-    if(e.target.tagName==='BUTTON'){
-      document.querySelectorAll('.cat button').forEach(b=>b.classList.remove('active'));
-      e.target.classList.add('active');
-      filter();
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>ArenaGamers - Main Game Gratis Online & Offline</title>
+  <meta name="description" content="Mainkan ratusan game gratis di ArenaGamers. Game HTML5, offline, arcade, racing, shooting, dan lainnya. Update game terbaru setiap hari.">
+  <meta name="keywords" content="game gratis, game online, game offline, main game, arena gamers, html5 games">
+  
+  <link rel="canonical" href="https://arenagamers.biz.id/">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="ArenaGamers - Main Game Gratis">
+  <meta property="og:description" content="Mainkan ratusan game gratis. Arcade, Racing, Shooting, Puzzle dan lainnya.">
+  <meta property="og:url" content="https://arenagamers.biz.id/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="id_ID">
+  
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png">
+  
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;background:#0d0d13;color:#fff;font-family:Segoe UI,sans-serif}
+    .header{padding:14px 16px;background:#161622;border-bottom:2px solid #ff0080;display:flex;justify-content:space-between;align-items:center}
+    .logo{color:#ff2e9d;font-weight:900;font-size:22px;letter-spacing:1px;text-decoration:none}
+    .nav a{color:#a1a1aa;text-decoration:none;font-size:13px;margin-left:16px}
+    .nav a:hover{color:#ff2e9d}
+    .banner{margin:12px;border:1px dashed #333;padding:20px;text-align:center;color:#666;border-radius:12px;background:#161622;font-size:12px}
+    .search{margin:12px;padding:14px;border-radius:12px;background:#161622;width:calc(100% - 24px);border:1px solid #2a2a3a;color:#fff;outline:none}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}
+    @media(min-width:700px){.grid{grid-template-columns:1fr 1fr 1fr 1fr}}
+    .card{background:#161622;border-radius:14px;overflow:hidden;text-decoration:none;color:#fff;display:block;border:1px solid #222;transition:.2s}
+    .card:hover{transform:translateY(-2px);border-color:#ff0080}
+    .card img{width:100%;height:150px;object-fit:cover;background:#222;display:block}
+    .card .t{padding:10px 10px 2px;font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .card .c{padding:0 10px 10px;font-size:11px;color:#a1a1aa}
+    .cat{display:flex;gap:8px;padding:0 12px;overflow:auto}
+    .cat button{white-space:nowrap;padding:8px 14px;border-radius:20px;border:1px solid #333;background:#161622;color:#a1a1aa;cursor:pointer}
+    .cat button.active{background:#ff0080;color:#fff;border-color:#ff0080}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="/" class="logo">ArenaGamers</a>
+    <div class="nav">
+      <a href="/">Games</a>
+      <a href="/news.html">News</a>
+    </div>
+  </div>
+
+  <div class="banner">Area Iklan Banner (Monetag / AdSense) - ads.txt sudah valid</div>
+
+  <div class="cat" id="cats"></div>
+  <input id="q" class="search" placeholder="Cari game... misal Bus, Racing...">
+  <div id="count" style="padding:0 16px;color:#a1a1aa;font-size:12px"></div>
+  <div id="list" class="grid">Memuat 20 game...</div>
+
+  <script src="assets/js/games-feed.js"></script>
+  <script>
+    const listEl = document.getElementById('list');
+    const countEl = document.getElementById('count');
+    const qEl = document.getElementById('q');
+    const catsEl = document.getElementById('cats');
+    let ALL = [];
+    const categories = ['Semua','Arcade','Action','Shooting','Sports','Racing','Puzzle','Clicker','Girls'];
+    
+    catsEl.innerHTML = categories.map((c,i) => 
+      `<button class="${i==0?'active':''}" data-cat="${c}">${c}</button>`
+    ).join('');
+
+    function render(arr){
+      countEl.textContent = arr.length + ' game ditemukan';
+      listEl.innerHTML = arr.map(g => {
+        const id = getGameId(g);
+        return `<a class="card" href="play.html?id=${encodeURIComponent(id)}">
+          <img src="${getThumb(g)}" loading="lazy" onerror="this.src='https://via.placeholder.com/512x384/161622/ff0080?text='+encodeURIComponent(getGameTitle(g))">
+          <div class="t">${getGameTitle(g)}</div>
+          <div class="c">${g.category||'Game'}</div>
+        </a>`;
+      }).join('') || '<p style="grid-column:1/-1;text-align:center;color:#a1a1aa">Game tidak ditemukan</p>';
     }
-  });
-});
-</script>
-</body></html>
+
+    function filter(){
+      const k = qEl.value.toLowerCase();
+      const activeCat = document.querySelector('.cat button.active').dataset.cat;
+      let f = ALL;
+      if(activeCat !== 'Semua') f = f.filter(g => (g.category||'').toLowerCase() === activeCat.toLowerCase());
+      if(k) f = f.filter(g => (g.title||'').toLowerCase().includes(k));
+      render(f);
+    }
+
+    getGamesCatalog().then(games => {
+      ALL = games;
+      render(ALL);
+      qEl.addEventListener('input', filter);
+      catsEl.addEventListener('click', e => {
+        if(e.target.tagName === 'BUTTON'){
+          document.querySelectorAll('.cat button').forEach(b => b.classList.remove('active'));
+          e.target.classList.add('active');
+          filter();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
