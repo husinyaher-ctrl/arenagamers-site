@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <script>(function(s){s.dataset.zone='11839143',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Monetag - Sesuai instruksi: tepat setelah <head> + async biar tidak blocking -->
+  <script async data-zone="11839143" src="https://al5sm.com/tag.min.js"></script>
   
   <title>ArenaGamers - Main Game Gratis Online & Offline</title>
   <meta name="description" content="Mainkan ratusan game gratis di ArenaGamers. Game HTML5, offline, arcade, racing, shooting, dan lainnya. Update game terbaru setiap hari.">
@@ -25,8 +27,9 @@
     .logo{color:#ff2e9d;font-weight:900;font-size:22px;letter-spacing:1px;text-decoration:none}
     .nav a{color:#a1a1aa;text-decoration:none;font-size:13px;margin-left:16px}
     .nav a:hover{color:#ff2e9d}
-    .banner{margin:12px;border:1px dashed #333;padding:20px;text-align:center;color:#666;border-radius:12px;background:#161622;font-size:12px}
-    .search{margin:12px;padding:14px;border-radius:12px;background:#161622;width:calc(100% - 24px);border:1px solid #2a2a3a;color:#fff;outline:none}
+    .banner{margin:12px;border:1px dashed #333;padding:20px;text-align:center;color:#666;border-radius:12px;background:#161622;font-size:12px;min-height:80px}
+    .search{margin:12px;display:block;width:calc(100% - 24px);padding:14px;border-radius:12px;background:#161622;border:1px solid #2a2a3a;color:#fff;outline:none}
+    .search:focus{border-color:#ff0080}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}
     @media(min-width:700px){.grid{grid-template-columns:1fr 1fr 1fr 1fr}}
     .card{background:#161622;border-radius:14px;overflow:hidden;text-decoration:none;color:#fff;display:block;border:1px solid #222;transition:.2s}
@@ -58,7 +61,7 @@
   <div class="banner">Area Iklan Banner (Monetag / AdSense)</div>
 
   <div class="cat" id="cats"></div>
-  <input id="q" class="search" placeholder="Cari game... misal Bus, Racing...">
+  <input id="q" class="search" type="search" placeholder="Cari game... misal Bus, Racing...">
   <div id="count" style="padding:0 16px;color:#a1a1aa;font-size:12px"></div>
   <div id="list" class="grid">Memuat game...</div>
   
