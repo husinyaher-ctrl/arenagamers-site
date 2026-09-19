@@ -4,19 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
-  <!-- Monetag - Sesuai instruksi: tepat setelah <head> + async biar tidak blocking -->
+  <!-- Monetag 11839143 - Onclick/Pop - Tetap setelah <head> -->
   <script async data-zone="11839143" src="https://al5sm.com/tag.min.js"></script>
   
   <title>ArenaGamers - Main Game Gratis Online & Offline</title>
   <meta name="description" content="Mainkan ratusan game gratis di ArenaGamers. Game HTML5, offline, arcade, racing, shooting, dan lainnya. Update game terbaru setiap hari.">
-  
   <link rel="canonical" href="https://www.arenagamers.biz.id/">
-  
   <meta property="og:title" content="ArenaGamers - Main Game Gratis">
   <meta property="og:description" content="Mainkan ratusan game gratis. Arcade, Racing, Shooting, Puzzle dan lainnya.">
   <meta property="og:url" content="https://www.arenagamers.biz.id/">
   <meta property="og:type" content="website">
-  
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icon-192.png">
   
@@ -27,7 +24,6 @@
     .logo{color:#ff2e9d;font-weight:900;font-size:22px;letter-spacing:1px;text-decoration:none}
     .nav a{color:#a1a1aa;text-decoration:none;font-size:13px;margin-left:16px}
     .nav a:hover{color:#ff2e9d}
-    .banner{margin:12px;border:1px dashed #333;padding:20px;text-align:center;color:#666;border-radius:12px;background:#161622;font-size:12px;min-height:80px}
     .search{margin:12px;display:block;width:calc(100% - 24px);padding:14px;border-radius:12px;background:#161622;border:1px solid #2a2a3a;color:#fff;outline:none}
     .search:focus{border-color:#ff0080}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}
@@ -40,8 +36,6 @@
     .cat{display:flex;gap:8px;padding:0 12px;overflow:auto}
     .cat button{white-space:nowrap;padding:8px 14px;border-radius:20px;border:1px solid #333;background:#161622;color:#a1a1aa;cursor:pointer}
     .cat button.active{background:#ff0080;color:#fff;border-color:#ff0080}
-    
-    /* Pagination */
     .pagination{display:flex;justify-content:center;align-items:center;gap:8px;padding:20px 12px;flex-wrap:wrap}
     .pagination button{padding:8px 14px;border-radius:8px;border:1px solid #333;background:#161622;color:#a1a1aa;cursor:pointer;font-size:13px}
     .pagination button:hover{border-color:#ff0080;color:#fff}
@@ -58,14 +52,12 @@
     </div>
   </div>
 
-  <div class="banner">Area Iklan Banner (Monetag / AdSense)</div>
+  <!-- BANNER SUDAH DIHAPUS TOTAL -->
 
   <div class="cat" id="cats"></div>
   <input id="q" class="search" type="search" placeholder="Cari game... misal Bus, Racing...">
   <div id="count" style="padding:0 16px;color:#a1a1aa;font-size:12px"></div>
   <div id="list" class="grid">Memuat game...</div>
-  
-  <!-- Pagination -->
   <div class="pagination" id="pagination"></div>
 
   <script src="assets/js/games-feed.js"></script>
@@ -75,25 +67,13 @@
     const qEl = document.getElementById('q');
     const catsEl = document.getElementById('cats');
     const paginationEl = document.getElementById('pagination');
-    
-    let ALL = [];
-    let filtered = [];
-    let currentPage = 1;
-    const perPage = 10; // jumlah game per halaman
-    
+    let ALL = []; let filtered = []; let currentPage = 1; const perPage = 10;
     const categories = ['Semua','Arcade','Action','Shooting','Sports','Racing','Puzzle','Clicker','Girls'];
-    
-    catsEl.innerHTML = categories.map((c,i) => 
-      `<button class="${i==0?'active':''}" data-cat="${c}">${c}</button>`
-    ).join('');
-
+    catsEl.innerHTML = categories.map((c,i) => `<button class="${i==0?'active':''}" data-cat="${c}">${c}</button>`).join('');
     function render(){
-      const start = (currentPage - 1) * perPage;
-      const end = start + perPage;
+      const start = (currentPage - 1) * perPage; const end = start + perPage;
       const pageItems = filtered.slice(start, end);
-      
       countEl.textContent = filtered.length + ' game ditemukan';
-      
       listEl.innerHTML = pageItems.map(g => {
         const id = getGameId(g);
         return `<a class="card" href="play.html?id=${encodeURIComponent(id)}">
@@ -102,81 +82,41 @@
           <div class="c">${g.category||'Game'}</div>
         </a>`;
       }).join('') || '<p style="grid-column:1/-1;text-align:center;color:#a1a1aa">Game tidak ditemukan</p>';
-      
       renderPagination();
     }
-
     function renderPagination(){
       const totalPages = Math.ceil(filtered.length / perPage);
-      
-      if(totalPages <= 1){
-        paginationEl.innerHTML = '';
-        return;
-      }
-      
-      let html = '';
-      
-      // Tombol Previous
-      html += `<button ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})">‹ Prev</button>`;
-      
-      // Nomor halaman
-      for(let i = 1; i <= totalPages; i++){
-        html += `<button class="${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
-      }
-      
-      // Tombol Next
+      if(totalPages <= 1){ paginationEl.innerHTML = ''; return; }
+      let html = `<button ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})">‹ Prev</button>`;
+      for(let i = 1; i <= totalPages; i++){ html += `<button class="${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`; }
       html += `<button ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${currentPage + 1})">Next ›</button>`;
-      
       paginationEl.innerHTML = html;
     }
-
-    function goToPage(page){
-      currentPage = page;
-      render();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
+    function goToPage(page){ currentPage = page; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
     function filter(){
-      const k = qEl.value.toLowerCase();
-      const activeCat = document.querySelector('.cat button.active').dataset.cat;
-      
-      filtered = ALL;
-      if(activeCat !== 'Semua') {
-        filtered = filtered.filter(g => (g.category||'').toLowerCase() === activeCat.toLowerCase());
-      }
-      if(k) {
-        filtered = filtered.filter(g => (g.title||'').toLowerCase().includes(k));
-      }
-      
-      currentPage = 1; // reset ke halaman 1 setiap filter
-      render();
+      const k = qEl.value.toLowerCase(); const activeCat = document.querySelector('.cat button.active').dataset.cat;
+      filtered = ALL; if(activeCat !== 'Semua') { filtered = filtered.filter(g => (g.category||'').toLowerCase() === activeCat.toLowerCase()); }
+      if(k) { filtered = filtered.filter(g => (g.title||'').toLowerCase().includes(k)); }
+      currentPage = 1; render();
     }
-
     getGamesCatalog().then(games => {
-      ALL = games;
-      filtered = games;
-      render();
-      
+      ALL = games; filtered = games; render();
       qEl.addEventListener('input', filter);
       catsEl.addEventListener('click', e => {
         if(e.target.tagName === 'BUTTON'){
           document.querySelectorAll('.cat button').forEach(b => b.classList.remove('active'));
-          e.target.classList.add('active');
-          filter();
+          e.target.classList.add('active'); filter();
         }
       });
     });
   </script>
-  <!-- Footer -->
 <footer style="background:#161622; border-top:1px solid #2a2a3a; padding:24px 16px; margin-top:40px; text-align:center;">
   <div style="max-width:600px; margin:0 auto;">
     <div style="margin-bottom:12px;">
       <a href="/privacy.html" style="color:#a1a1aa; text-decoration:none; font-size:13px; margin:0 10px;">Privacy Policy</a>
       <a href="/terms.html" style="color:#a1a1aa; text-decoration:none; font-size:13px; margin:0 10px;">Terms of Service</a>
     </div>
-    <div style="color:#666; font-size:12px;">
-      © 2026 ArenaGamers. All rights reserved.
-    </div>
+    <div style="color:#666; font-size:12px;">© 2026 ArenaGamers. All rights reserved.</div>
   </div>
 </footer>
 </body>
